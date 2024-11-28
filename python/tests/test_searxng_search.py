@@ -1,7 +1,7 @@
 import pytest
 import asyncio
-from ..helpers.searxng_search import search
-from ..tools.searxng_search import SearxngSearch
+from python.helpers.searxng_search import search
+from python.tools.searxng_search import SearxngSearch
 
 @pytest.mark.asyncio
 async def test_searxng_search_helper():
