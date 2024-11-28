@@ -7,7 +7,7 @@ import os
 from typing import List, Dict, Any
 from urllib.parse import quote
 from bs4 import BeautifulSoup
-import models
+import initialize
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,12 @@ async def get_webpage_content(url: str) -> str:
 async def get_embedding(text: str) -> List[float]:
     """Get embedding vector for text using project's configured embedding model"""
     try:
-        # Use the same embedding model as the rest of the project
-        embeddings = models.get_openai_embedding(model_name="openai/text-embedding")
+        # Use the project's embedding model
+        embeddings = initialize.embedding_llm
+        if not embeddings:
+            logger.warning("Project embedding model not initialized")
+            return []
+            
         result = embeddings.embed_query(text)
         logger.debug(f"Generated embedding of length {len(result)}")
         return result
@@ -38,24 +42,16 @@ async def summarize_content(content: str) -> str:
     if not content:
         return ""
     try:
-        # Use environment variable for API key
-        api_key = os.getenv("API_KEY_OPENAI")
-        if not api_key:
-            logger.warning("OpenAI API key not found in environment variables")
+        # Use the project's utility model
+        utility_model = initialize.utility_llm
+        if not utility_model:
+            logger.warning("Project utility model not initialized")
             return ""
 
-        response = await litellm.acompletion(
-            model="gpt-3.5-turbo",
-            messages=[{
-                "role": "system",
-                "content": "Summarize the following text in a concise way:"
-            }, {
-                "role": "user", 
-                "content": content[:4000]  # Limit content length
-            }],
-            api_key=api_key
+        response = await utility_model.apredict(
+            f"Summarize the following text in a concise way:\n\n{content[:4000]}"  # Limit content length
         )
-        return response.choices[0].message.content
+        return response
     except Exception as e:
         logger.warning(f"Failed to summarize content: {str(e)}")
         return ""
