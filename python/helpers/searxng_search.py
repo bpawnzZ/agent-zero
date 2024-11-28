@@ -4,11 +4,12 @@ import trafilatura
 import litellm
 import logging
 import os
-
-logger = logging.getLogger(__name__)
 from typing import List, Dict, Any
 from urllib.parse import quote
 from bs4 import BeautifulSoup
+import models
+
+logger = logging.getLogger(__name__)
 
 async def get_webpage_content(url: str) -> str:
     """Extract main content from webpage"""
@@ -21,22 +22,13 @@ async def get_webpage_content(url: str) -> str:
     return ""
 
 async def get_embedding(text: str) -> List[float]:
-    """Get embedding vector for text using OpenAI"""
+    """Get embedding vector for text using project's configured embedding model"""
     try:
-        # Use environment variable for API key
-        api_key = os.getenv("API_KEY_OPENAI")
-        if not api_key:
-            logger.warning("OpenAI API key not found in environment variables")
-            return []
-
-        response = await litellm.aembedding(
-            model="text-embedding-3-small",  # Using OpenAI's latest embedding model
-            input=text,
-            api_key=api_key
-        )
-        embedding = response.data[0].embedding
-        logger.debug(f"Generated embedding of length {len(embedding)}")
-        return embedding
+        # Use the same embedding model as the rest of the project
+        embeddings = models.get_openai_embedding(model_name="openai/text-embedding")
+        result = embeddings.embed_query(text)
+        logger.debug(f"Generated embedding of length {len(result)}")
+        return result
     except Exception as e:
         logger.warning(f"Failed to generate embedding: {str(e)}")
         return []
