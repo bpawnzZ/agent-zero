@@ -7,7 +7,7 @@ import os
 from typing import List, Dict, Any
 from urllib.parse import quote
 from bs4 import BeautifulSoup
-import initialize
+import models
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +24,10 @@ async def get_webpage_content(url: str) -> str:
 async def get_embedding(text: str) -> List[float]:
     """Get embedding vector for text using project's configured embedding model"""
     try:
-        # Use the project's embedding model
-        embeddings = initialize.embedding_llm
+        # Use OpenAI embeddings directly from models
+        embeddings = models.get_openai_embedding(model_name="openai/text-embedding")
         if not embeddings:
-            logger.warning("Project embedding model not initialized")
+            logger.warning("Failed to initialize embedding model")
             return []
             
         result = embeddings.embed_query(text)
@@ -42,13 +42,13 @@ async def summarize_content(content: str) -> str:
     if not content:
         return ""
     try:
-        # Use the project's utility model
-        utility_model = initialize.utility_llm
-        if not utility_model:
-            logger.warning("Project utility model not initialized")
+        # Use OpenAI chat model directly from models
+        chat_model = models.get_openai_chat(model_name="openai/gpt-4o-mini", temperature=0.8)
+        if not chat_model:
+            logger.warning("Failed to initialize chat model")
             return ""
 
-        response = await utility_model.apredict(
+        response = await chat_model.apredict(
             f"Summarize the following text in a concise way:\n\n{content[:4000]}"  # Limit content length
         )
         return response
