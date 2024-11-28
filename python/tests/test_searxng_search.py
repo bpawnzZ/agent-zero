@@ -15,6 +15,9 @@ async def test_searxng_search_helper():
         assert 'title' in results[0]
         assert 'url' in results[0]
         assert 'snippet' in results[0]
+        assert 'content' in results[0]
+        assert 'summary' in results[0]
+        assert 'embedding' in results[0]
 
 @pytest.mark.asyncio
 async def test_searxng_search_tool():

@@ -33,7 +33,7 @@ class SearxngSearch(Tool):
             for i, result in enumerate(search_results, 1):
                 message += f"{i}. {result['title']}\n"
                 message += f"   URL: {result['url']}\n"
-                message += f"   {result['snippet']}\n\n"
+                message += f"   Summary: {result['summary']}\n\n"
 
             return Response(
                 message=message,
