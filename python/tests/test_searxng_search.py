@@ -19,7 +19,12 @@ async def test_searxng_search_helper():
 @pytest.mark.asyncio
 async def test_searxng_search_tool():
     # Test the search tool
-    tool = SearxngSearch()
+    tool = SearxngSearch(
+        agent=None,
+        name="searxng_search",
+        args={"query": {"type": "string", "description": "Search query"}},
+        message="Search the web using SearXNG"
+    )
     response = await tool.execute(query="python programming", results=2)
     
     assert response is not None
@@ -29,7 +34,12 @@ async def test_searxng_search_tool():
 
 @pytest.mark.asyncio
 async def test_empty_query():
-    tool = SearxngSearch()
+    tool = SearxngSearch(
+        agent=None,
+        name="searxng_search",
+        args={"query": {"type": "string", "description": "Search query"}},
+        message="Search the web using SearXNG"
+    )
     response = await tool.execute(query="")
     
     assert response is not None
