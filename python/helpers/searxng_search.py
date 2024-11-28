@@ -2,6 +2,9 @@ import aiohttp
 import json
 import trafilatura
 import litellm
+import logging
+
+logger = logging.getLogger(__name__)
 from typing import List, Dict, Any
 from urllib.parse import quote
 from bs4 import BeautifulSoup
@@ -25,8 +28,11 @@ async def get_embedding(text: str) -> List[float]:
             api_base="https://litellm.2damoon.xyz",
             api_key="sk-FiIu6b1Hyq7TDX-C9phogQ"
         )
-        return response.data[0].embedding
-    except:
+        embedding = response.data[0].embedding
+        logger.debug(f"Generated embedding of length {len(embedding)}")
+        return embedding
+    except Exception as e:
+        logger.warning(f"Failed to generate embedding: {str(e)}")
         return []
 
 async def summarize_content(content: str) -> str:
