@@ -3,6 +3,7 @@ import json
 import trafilatura
 import litellm
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 from typing import List, Dict, Any
@@ -22,11 +23,16 @@ async def get_webpage_content(url: str) -> str:
 async def get_embedding(text: str) -> List[float]:
     """Get embedding vector for text using OpenAI"""
     try:
+        # Use environment variable for API key
+        api_key = os.getenv("API_KEY_OPENAI")
+        if not api_key:
+            logger.warning("OpenAI API key not found in environment variables")
+            return []
+
         response = await litellm.aembedding(
-            model="openai/text-embedding",
+            model="text-embedding-3-small",  # Using OpenAI's latest embedding model
             input=text,
-            api_base="https://litellm.2damoon.xyz",
-            api_key="sk-FiIu6b1Hyq7TDX-C9phogQ"
+            api_key=api_key
         )
         embedding = response.data[0].embedding
         logger.debug(f"Generated embedding of length {len(embedding)}")
@@ -40,8 +46,14 @@ async def summarize_content(content: str) -> str:
     if not content:
         return ""
     try:
+        # Use environment variable for API key
+        api_key = os.getenv("API_KEY_OPENAI")
+        if not api_key:
+            logger.warning("OpenAI API key not found in environment variables")
+            return ""
+
         response = await litellm.acompletion(
-            model="openai/gpt-3.5-turbo",
+            model="gpt-3.5-turbo",
             messages=[{
                 "role": "system",
                 "content": "Summarize the following text in a concise way:"
@@ -49,11 +61,11 @@ async def summarize_content(content: str) -> str:
                 "role": "user", 
                 "content": content[:4000]  # Limit content length
             }],
-            api_base="https://litellm.2damoon.xyz",
-            api_key="sk-FiIu6b1Hyq7TDX-C9phogQ"
+            api_key=api_key
         )
         return response.choices[0].message.content
-    except:
+    except Exception as e:
+        logger.warning(f"Failed to summarize content: {str(e)}")
         return ""
 
 async def search(query: str, results: int = 5, engines: str = "duckduckgo,google") -> List[Dict[str, Any]]:
