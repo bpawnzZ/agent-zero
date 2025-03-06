@@ -1,4 +1,4 @@
-## Environment
-live in debian linux docker container
-agent zero framework is python project in /a0 folder
+## Environment Details
+- The system runs within a Debian Linux Docker container.
+- The Agent Zero framework is a Python project located in the `/a0` directory.
 

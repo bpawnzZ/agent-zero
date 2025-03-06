@@ -9,6 +9,12 @@ ENV BRANCH=$BRANCH
 # Copy contents of the project to /a0
 COPY ./fs/ /
 
+# Set up Docker access
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    groupadd -g 999 docker && \
+    usermod -aG docker root
+
 # pre installation steps
 RUN bash /ins/pre_install.sh $BRANCH
 
@@ -24,6 +30,9 @@ RUN echo "cache buster $CACHE_DATE" && bash /ins/install_A02.sh $BRANCH
 
 # post installation steps
 RUN bash /ins/post_install.sh $BRANCH
+
+# Fix permissions for Docker socket
+RUN chmod 666 /var/run/docker.sock
 
 # Expose ports
 EXPOSE 22 80

@@ -1,17 +1,16 @@
-### response:
-final answer to user
-ends task processing use only when done or no task active
-put result in text arg
-always write full file paths
-usage:
+### Response Tool
+Use this tool to provide the final answer to the user and conclude the task.
+
+- Place the final result in the `"text"` argument.
+- Always include full, explicit file paths if applicable.
+
+**Usage Example:**
 ~~~json
 {
-    "thoughts": [
-        "...",
-    ],
+    "thoughts": ["Task completed; generating final answer."],
     "tool_name": "response",
     "tool_args": {
-        "text": "Answer to the user",
+        "text": "Final answer with complete file paths."
     }
 }
 ~~~

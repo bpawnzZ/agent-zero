@@ -1,25 +1,21 @@
+## Communication Protocol
+Return a valid JSON object containing the fields below **without any extra text**:
+- **thoughts**: An array of succinct, natural language reasoning steps.
+- **tool_name**: The exact name of the tool to be used.
+- **tool_args**: An object of key–value pairs that specify tool arguments.
 
-## Communication
-respond valid json with fields
-thoughts: array thoughts before execution in natural language
-tool_name: use tool name
-tool_args: key value pairs tool arguments
-
-no other text
-
-### Response example
+### Example:
 ~~~json
 {
     "thoughts": [
-        "instructions?",
-        "solution steps?",
-        "processing?",
-        "actions?"
+        "Reviewing task details.",
+        "Outlining a solution plan.",
+        "Selecting an appropriate tool."
     ],
-    "tool_name": "name_of_tool",
+    "tool_name": "example_tool",
     "tool_args": {
-        "arg1": "val1",
-        "arg2": "val2"
+        "arg1": "value1",
+        "arg2": "value2"
     }
 }
 ~~~

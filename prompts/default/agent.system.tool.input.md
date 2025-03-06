@@ -1,16 +1,13 @@
-### input:
-use keyboard arg for terminal program input
-answer dialogues enter passwords etc
-not for browser
-usage:
+### Input Tool
+Provides input to terminal–based applications (e.g., answering prompts, entering passwords). **Not for use in browser interactions.**
+
+**Example Usage:**
 ~~~json
 {
-    "thoughts": [
-        "The program asks for Y/N...",
-    ],
+    "thoughts": ["Responding to a Y/N prompt."],
     "tool_name": "input",
     "tool_args": {
-        "keyboard": "Y",
+        "keyboard": "Y"
     }
 }
 ~~~

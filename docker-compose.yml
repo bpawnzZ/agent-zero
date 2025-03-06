@@ -1,0 +1,26 @@
+services:
+  agent-zero:
+    container_name: agent-zero
+    image: frdel/agent-zero-run:testing
+    volumes:
+      - ./a0:/a0
+      - ./prompts:/a0/prompts
+      - ./knowledge:/a0/knowledge
+      - ./memory:/a0/memory
+      - ./python:/a0/python
+      - ./shared:/root/shared
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "50080:80"
+      - "2222:22"
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - SSH_ENABLE=true
+    restart: unless-stopped
+    networks:
+      - caddy_default
+
+networks:
+  caddy_default:
+    external: true

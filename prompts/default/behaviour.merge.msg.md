@@ -1,5 +1,5 @@
-# Current ruleset
+## Current Ruleset
 {{current_rules}}
 
-# Adjustments
+## Adjustments
 {{adjustments}}

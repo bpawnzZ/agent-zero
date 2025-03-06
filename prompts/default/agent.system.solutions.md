@@ -1,4 +1,4 @@
-# Solutions from the past
-- following are your memories about successful solutions of related problems:
+## Past Solutions
+* Below are successful past solutions related to similar tasks:
 
 {{solutions}}

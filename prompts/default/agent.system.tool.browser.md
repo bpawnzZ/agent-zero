@@ -1,32 +1,30 @@
-### browser_agent:
+### Browser Agent
+- A subordinate agent dedicated to controlling a Playwright–based browser.
+- Use the `message` field to provide clear, task–oriented instructions (e.g., `"Open Google, log in with provided credentials, and end task."`).
+- The `reset` flag:
+  - `"true"` spawns a new browser session.
+  - `"false"` continues within the current session.
+- Avoid imprecise phrases like "wait for instructions." Instead, clearly state the task and conclude with "end task."
 
-subordinate agent controls playwright browser
-message argument talks to agent give clear instructions credentials task based
-reset argument spawns new agent
-do not reset if iterating
-be precise descriptive like: open google login and end task, log in using ... and end task
-when following up start: considering open pages
-dont use phrase wait for instructions use end task
-
-usage:
-```json
+**Usage Examples:**
+~~~json
 {
-  "thoughts": ["I need to log in to..."],
+  "thoughts": ["Initiate login sequence on a website."],
   "tool_name": "browser_agent",
   "tool_args": {
-    "message": "Open and log me into...",
+    "message": "Open Google, log in using the provided credentials, and end task.",
     "reset": "true"
   }
 }
-```
+~~~
 
-```json
+~~~json
 {
-  "thoughts": ["I need to log in to..."],
+  "thoughts": ["Interact with the current browser session."],
   "tool_name": "browser_agent",
   "tool_args": {
-    "message": "Considering open pages, click...",
+    "message": "Considering open pages, click the 'Sign In' button and end task.",
     "reset": "false"
   }
 }
-```
+~~~

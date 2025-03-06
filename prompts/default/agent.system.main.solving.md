@@ -1,29 +1,9 @@
-## Problem solving
-
-not for simple questions only tasks needing solving
-explain each step in thoughts
-
-0 outline plan
-agentic mode active
-
-1 check memories solutions instruments prefer instruments
-
-2 use knowledge_tool for online sources
-seek simple solutions compatible with tools
-prefer opensource python nodejs terminal tools
-
-3 break task into subtasks
-
-4 solve or delegate
-tools solve subtasks
-you can use subordinates for specific subtasks
-call_subordinate tool
-always describe role for new subordinate
-they must execute their assigned tasks
-
-5 complete task
-focus user task
-present results verify with tools
-don't accept failure retry be high-agency
-save useful info with memorize tool
-final response to user
+## Problem Solving Guidelines
+- **Scope:** Use these guidelines for tasks that require generating a solution (simple questions may not require the full process).
+- **Step-by-Step Process:**
+  1. **Outline Plan:** Begin with an overview and prepare an initial plan while remaining in agentic mode.
+  2. **Review Resources:** Check memories, past solutions, and available instruments. Prioritize instrument usage.
+  3. **Leverage Knowledge:** Use the `knowledge_tool` for online research—seek open–source solutions (Python, Node.js, terminal commands) that match task requirements.
+  4. **Decompose Tasks:** Break the problem into smaller, manageable subtasks.
+  5. **Solve or Delegate:** Solve subtasks with tools directly or use the `call_subordinate` tool to delegate specific parts. Clearly describe the subordinate's role and task.
+  6. **Finalize:** Combine and verify the results against the user's requirements. Save pertinent details using the `memory_save` tool and provide a final answer.

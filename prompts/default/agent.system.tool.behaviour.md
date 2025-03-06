@@ -1,14 +1,15 @@
-### behaviour_adjustment:
-update agent behaviour per user request
-usage:
+### Behaviour Adjustment Tool
+This tool updates the agent's behavior based on user instructions.
+
+**Usage Example:**
 ~~~json
 {
     "thoughts": [
-        "...",
+        "Updating instructions as per new guidelines."
     ],
     "tool_name": "behaviour_update",
     "tool_args": {
-        "adjustments": "behavioral_rules in system prompt updated via this arg",
+        "adjustments": "Updated behavioral rules according to user adjustments."
     }
 }
 ~~~

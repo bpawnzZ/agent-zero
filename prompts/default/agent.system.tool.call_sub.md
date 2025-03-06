@@ -1,30 +1,22 @@
-### call_subordinate
+### Call Subordinate
+- Use this tool to delegate specific subtasks to subordinate agents (e.g., coder, engineer, scientist).
+- In the `message` field, clearly describe:
+  - The subordinate's role.
+  - Task details and goals.
+  - Any relevant context.
+- **Delegate only specific subtasks**, not the entire task.
+- The `reset` flag:
+  - `"true"` spawns a new subordinate.
+  - `"false"` continues with an existing subordinate.
+- **If you are a subordinate:** Your superior is identified as `{{agent_name}}` (one level higher). Execute your assigned tasks and delegate if needed.
 
-you can use subordinates for subtasks
-subordinates can be scientist coder engineer etc
-message field: always describe role, task details goal overview for new subordinate
-delegate specific subtasks not entire task
-reset arg usage:
-  "true": spawn new subordinate
-  "false": ask respond to subordinate
-if superior, orchestrate
-respond to existing subordinates using call_subordinate tool with reset: "false
-
-### if you are subordinate:
-- superior is {{agent_name}} minus 1
-- execute the task you were assigned
-- delegate further if asked
-
-example usage
+**Example:**
 ~~~json
 {
-    "thoughts": [
-        "The result seems to be ok but...",
-        "I will ask a coder subordinate to fix...",
-    ],
+    "thoughts": ["The solution needs refinement. I will ask a coding expert to optimize the algorithm."],
     "tool_name": "call_subordinate",
     "tool_args": {
-        "message": "...",
+        "message": "Coder, please optimize the algorithm for efficiency.",
         "reset": "true"
     }
 }

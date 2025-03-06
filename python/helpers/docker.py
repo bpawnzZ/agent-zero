@@ -8,19 +8,21 @@ from python.helpers.print_style import PrintStyle
 from python.helpers.log import Log
 
 class DockerContainerManager:
-    def __init__(self, image: str, name: str, ports: Optional[dict[str, int]] = None, volumes: Optional[dict[str, dict[str, str]]] = None,logger: Log|None=None):
+    def __init__(self, logger: Log, name: str, image: str, ports: dict, volumes: dict):
         self.logger = logger
-        self.image = image
         self.name = name
+        self.image = image
         self.ports = ports
         self.volumes = volumes
+        self.client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+        self.container = None
         self.init_docker()
                 
     def init_docker(self):
         self.client = None
         while not self.client:
             try:
-                self.client = docker.from_env()
+                self.client = docker.DockerClient(base_url='unix://var/run/docker.sock')
                 self.container = None
             except Exception as e:
                 err = format_error(e)
@@ -62,38 +64,37 @@ class DockerContainerManager:
             })
         return infos
 
-    def start_container(self) -> None:
-        if not self.client: self.client = self.init_docker()
-        existing_container = None
-        for container in self.client.containers.list(all=True):
-            if container.name == self.name:
-                existing_container = container
-                break
-
-        if existing_container:
-            if existing_container.status != 'running':
-                PrintStyle.standard(f"Starting existing container: {self.name} for safe code execution...")
-                if self.logger: self.logger.log(type="info", content=f"Starting existing container: {self.name} for safe code execution...", temp=True)
-                
-                existing_container.start()
-                self.container = existing_container
-                time.sleep(2) # this helps to get SSH ready
-                
-            else:
-                self.container = existing_container
-                # PrintStyle.standard(f"Container with name '{self.name}' is already running with ID: {existing_container.id}")
-        else:
-            PrintStyle.standard(f"Initializing docker container {self.name} for safe code execution...")
-            if self.logger: self.logger.log(type="info", content=f"Initializing docker container {self.name} for safe code execution...", temp=True)
-
+    def start_container(self):
+        try:
+            self.container = self.client.containers.get(self.name)
+        except docker.errors.NotFound:
             self.container = self.client.containers.run(
                 self.image,
-                detach=True,
-                ports=self.ports, # type: ignore
                 name=self.name,
-                volumes=self.volumes, # type: ignore
-            ) 
-            # atexit.register(self.cleanup_container)
-            PrintStyle.standard(f"Started container with ID: {self.container.id}")
-            if self.logger: self.logger.log(type="info", content=f"Started container with ID: {self.container.id}")
-            time.sleep(5) # this helps to get SSH ready
+                ports=self.ports,
+                volumes=self.volumes,
+                detach=True
+            )
+
+    async def exec_command(self, command: str) -> str:
+        if not self.container:
+            raise Exception("Container not started")
+            
+        result = self.container.exec_run(
+            command,
+            workdir="/a0",
+            demux=True
+        )
+        
+        output = ""
+        if result.output[0]:  # stdout
+            output += result.output[0].decode('utf-8')
+        if result.output[1]:  # stderr
+            output += result.output[1].decode('utf-8')
+            
+        return output
+
+    def stop_container(self):
+        if self.container:
+            self.container.stop()
+            self.container = None

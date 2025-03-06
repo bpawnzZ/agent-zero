@@ -1,18 +1,15 @@
-### webpage_content_tool:
-get webpage text content news wiki etc
-use url arg for main text
-gather online content
-provide full valid url with http:// or https://
+### Webpage Content Tool
+Retrieves the text content from a specified webpage (e.g., news articles, Wikipedia pages).
 
-**Example usage**:
-```json
+- Provide a valid URL (including `http://` or `https://`) via the `url` argument.
+
+**Example Usage:**
+~~~json
 {
-    "thoughts": [
-        "...",
-    ],
+    "thoughts": ["Fetching content from the specified webpage."],
     "tool_name": "webpage_content_tool",
     "tool_args": {
-        "url": "https://...comexample",
+        "url": "https://www.example.com"
     }
 }
-```
+~~~

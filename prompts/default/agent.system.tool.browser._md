@@ -1,83 +1,65 @@
-### browser_open:
+### Browser Interaction: Open and Do Actions
 
-control stateful chromium browser using playwright
-use with url argument to open a new page
-all browser tools return simplified DOM with unique selectors
-once page is opened use browser_do tool to interact.
+**browser_open:**  
+- Controls the stateful Chromium browser via Playwright.
+- Opens a new page using the specified URL.
+- Returns a simplified DOM with unique selectors. Further interactions should use `browser_do`.
 
-```json
+**Example:**
+~~~json
 {
-  "thoughts": ["I need to send..."],
+  "thoughts": ["Initiate a new browser session."],
   "tool_name": "browser_open",
   "tool_args": {
     "url": "https://www.example.com"
   }
 }
-```
+~~~
 
-### browser_do:
+**browser_do:**  
+- Interact with the page by filling forms, clicking elements, pressing keys, or executing JavaScript.
+- Optional arguments include:
+  - `fill`: An array of objects with `selector` and `text`.
+  - `press`: An array of keys (e.g., "Enter", "Escape").
+  - `click`: An array of selectors to click.
+  - `execute`: A JavaScript string to execute.
+- Prefer interactions with `<a>` or `<button>` elements when possible.
+- Adapt strategy if an action fails; avoid repeating ineffective steps.
 
-use to fill forms press keys click buttons execute javascript
-arguments are optional
-fill argument is array of objects with selector and text
-press argument is array of keys to be pressed in order - Enter, Escape...
-click argument is an array of selectors clicked in order
-execute argument is a string of javascript executed
-always prefer clicking on <a> or <button> tags first
-confirm fields with Enter or find submit button
-consents and popups may block page, close them
-only use selectors mentioned in last browser response
-do not repeat same steps if do not work! find ways around problems
-```json
+**Examples:**
+~~~json
 {
-  "thoughts": [
-    "Login required...",
-    "I will fill username, password, click remember me and submit."
-  ],
+  "thoughts": ["Execute login: filling credentials and clicking submit."],
   "tool_name": "browser_do",
   "tool_args": {
     "fill": [
-      {
-        "selector": "12l",
-        "text": "root"
-      },
-      {
-        "selector": "14vs",
-        "text": "toor"
-      }
+      {"selector": "username_selector", "text": "root"},
+      {"selector": "password_selector", "text": "toor"}
     ],
-    "click": ["19c", "65d"]
+    "click": ["submit_button_selector"]
   }
 }
-```
+~~~
 
-```json
+~~~json
 {
-  "thoughts": [
-    "Search for...",
-    "I will fill search box and press Enter."
-  ],
+  "thoughts": ["Performing a search operation."],
   "tool_name": "browser_do",
   "tool_args": {
     "fill": [
-      {
-        "selector": "98d",
-        "text": "example"
-      }
+      {"selector": "search_box_selector", "text": "example query"}
     ],
     "press": ["Enter"]
   }
 }
-```
+~~~
 
-```json
+~~~json
 {
-  "thoughts": [
-    "Standard interaction not possible, I need to execute custom code..."
-  ],
+  "thoughts": ["Executing custom JavaScript for a specific interaction."],
   "tool_name": "browser_do",
   "tool_args": {
-    "execute": "const elem = document.querySelector('[data-uid=\"4z\"]'); elem.click();"
+    "execute": "document.querySelector('[data-uid=\"target-selector\"]').click();"
   }
 }
-```
+~~~
